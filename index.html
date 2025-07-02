@@ -10,7 +10,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+            scroll-behavior: smooth; /* Smooth scrolling for anchor links (fallback) */
         }
         /* Custom scrollbar for better aesthetics */
         ::-webkit-scrollbar {
@@ -36,12 +36,10 @@
         <div class="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
             <a href="#hero" class="text-2xl font-bold text-blue-700 mb-2 md:mb-0">Etobicoke Business Consulting</a>
             <div class="space-x-4">
-                <!-- Restored "Offerings" link -->
-                <a href="#offerings" class="text-gray-600 hover:text-blue-700 transition duration-300">Offerings</a>
+                <a href="#contact" class="text-gray-600 hover:text-blue-700 transition duration-300">Contact</a>
                 <a href="#aboutUs" class="text-gray-600 hover:text-blue-700 transition duration-300">About Us</a>
                 <a href="#ourExpertise" class="text-gray-600 hover:text-blue-700 transition duration-300">Our Expertise</a>
-                <!-- Added "Contact" link at the end -->
-                <a href="#contact" class="text-gray-600 hover:text-blue-700 transition duration-300">Contact</a>
+               
             </div>
         </div>
     </nav>
@@ -213,9 +211,8 @@
             <p class="text-lg text-gray-700 mb-8">
                 Team Etobicoke Business Consulting
             </p>
-
             <div class="bg-white p-8 rounded-xl shadow-md border border-gray-100">
-                <form action="https://formspree.io/f/yourformid" method="POST" class="space-y-6">
+                <form action="send.php" method="POST" class="space-y-6">
                     <!-- Replace 'yourformid' with your actual Formspree form ID. Instructions for Formspree below. -->
                     <div>
                         <label for="name" class="block text-left text-gray-700 text-sm font-semibold mb-2">Your Name</label>
@@ -229,14 +226,14 @@
                         <label for="message" class="block text-left text-gray-700 text-sm font-semibold mb-2">How Can We Help You?</label>
                         <textarea id="message" name="message" rows="5" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                     </div>
-                    <button type="submit" class="w-full bg-blue-700 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-800 transition duration-300 transform hover:scale-105 shadow-lg">
+                    <button type="submit" value="send" class="w-full bg-blue-700 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-800 transition duration-300 transform hover:scale-105 shadow-lg">
                         Send Your Inquiry
                     </button>
                 </form>
                 <div class="mt-8 text-center text-gray-700">
                     <p class="text-lg font-semibold">Prefer to speak directly?</p>
-                    <p class="mt-2">Email: <a href="mailto:ebc-contact@gmail.com" class="text-blue-600 hover:underline">ebc-contact@gmail.com</a></p>
-                    <p>Phone: <a href="tel:+16138514408" class="text-blue-600 hover:underline">+1-613-851-4408</a></p>
+                    <p class="mt-2">Email: <a href="mailto:info@etobicokebusinessconsulting.com" class="text-blue-600 hover:underline">info@etobicokebusinessconsulting.com</a></p>
+                    <p>Phone: <a href="tel:+16138514408" class="text-blue-600 hover:underline">+1 (613) 851-4408</a></p>
                 </div>
             </div>
         </div>
