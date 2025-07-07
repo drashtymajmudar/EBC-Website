@@ -53,10 +53,10 @@
             <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto opacity-90">
                 Expert consulting in software testing, AI-driven operations, and business growth strategies.
             </p>
+            <!-- <a href="#contact" class="bg-white text-blue-700 hover:bg-blue-100 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">Book online</a> -->
             <!-- The 'Book online' button, linked to the '#contact' section -->
-            <a href="#contact" class="bg-white text-blue-700 hover:bg-blue-100 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
-                Book Online
-            </a>
+            <!-- <button id="bookOnlineBtn" class="bg-white text-blue-700 hover:bg-blue-100 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">Book online</button> -->
+           
         </div>
         <!-- Simple background pattern for visual interest -->
         <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml;utf8,<svg width=&quot;100%&quot; height=&quot;100%&quot; viewBox=&quot;0 0 100 100&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;><circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;45&quot; fill=&quot;none&quot; stroke=&quot;white&quot; stroke-width=&quot;0.5&quot;/><rect x=&quot;10&quot; y=&quot;10&quot; width=&quot;80&quot; height=&quot;80&quot; fill=&quot;none&quot; stroke=&quot;white&quot; stroke-width=&quot;0.5&quot;/></svg>'); background-size: 50px 50px;"></div>
@@ -212,8 +212,8 @@
                 Team Etobicoke Business Consulting
             </p>
             <div class="bg-white p-8 rounded-xl shadow-md border border-gray-100">
-                <form action="send.php" method="POST" class="space-y-6">
-                    <!-- Replace 'yourformid' with your actual Formspree form ID. Instructions for Formspree below. -->
+                <form action="https://formspree.io/f/xzzgwopz" method="POST" class="space-y-6">
+                    
                     <div>
                         <label for="name" class="block text-left text-gray-700 text-sm font-semibold mb-2">Your Name</label>
                         <input type="text" id="name" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -232,8 +232,8 @@
                 </form>
                 <div class="mt-8 text-center text-gray-700">
                     <p class="text-lg font-semibold">Prefer to speak directly?</p>
-                    <p class="mt-2">Email: <a href="mailto:info@etobicokebusinessconsulting.com" class="text-blue-600 hover:underline">info@etobicokebusinessconsulting.com</a></p>
-                    <p>Phone: <a href="tel:+16138514408" class="text-blue-600 hover:underline">+1 (613) 851-4408</a></p>
+                    <p class="mt-2">Email: <a href="mailto:drashtymajmudar@gmail.com" class="text-blue-600 hover:underline">drashtymajmudar@gmail.com</a></p>
+                    <p>Phone: <a href="tel:+16128514409" class="text-blue-600 hover:underline">+1 (612) 851-4409</a></p>
                 </div>
             </div>
         </div>
@@ -249,5 +249,25 @@
         </div>
     </footer>
 
+<!--        <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Smooth scroll for the "Book online" button
+        document.getElementById('bookOnlineBtn').addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent default if it were an anchor, though it's a button now.
+            document.querySelector('#contact').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    </script> -->
 </body>
 </html>
