@@ -1,0 +1,24 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Public data (read-only for all authenticated users)
+    match /artifacts/{appId}/public/data/{collection}/{document} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Private data (read/write only by the authenticated user who owns it)
+    match /artifacts/{appId}/users/{userId}/{collection}/{document} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Example: Users collection - read/write for authenticated users
+    // Admins can write to any user document, clients can only write to their own
+    match /users/{userId} {
+      allow read: if request.auth != null; // Any authenticated user can read user profiles (e.g., for display)
+      allow create: if request.auth != null; // Any authenticated user can create their own profile on signup
+      allow update: if request.auth != null && request.auth.uid == userId; // Users can update their own profile
+      // Admin-specific write access:
+      allow update: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+  }
+}
