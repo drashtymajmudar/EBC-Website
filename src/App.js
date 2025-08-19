@@ -1,10 +1,39 @@
 import React, { useState, useEffect } from 'react';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAnalytics } from "firebase/analytics";
+
+// Your Firebase configuration (REPLACE WITH YOUR ACTUAL CONFIG)
+const firebaseConfig = {
+  apiKey: "AIzaSyBwwxtfVX0hEiQE5vkn0tJlLRRjYIedN4c",
+  authDomain: "etobicokebusinessconsulting.firebaseapp.com",
+  projectId: "etobicokebusinessconsulting",
+  storageBucket: "etobicokebusinessconsulting.firebasestorage.app",
+  messagingSenderId: "884503529620",
+  appId: "1:884503529620:web:740a557971be48bf2d0c81"
+};
+
+// Initialize Firebase services outside the component to avoid re-initialization
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const analytics = getAnalytics(app);
 
 // Main App component
 const App = () => {
   // State to manage potential login status (for future implementation)
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState(null); // 'admin' or 'client'
+  const [signupEmail, setSignupEmail] = useState('');
+  const [signupPassword, setSignupPassword] = useState('');
+  const [signupName, setSignupName] = useState('');
+  const [signupRole, setSignupRole] = useState('client'); // Default role for new sign-ups
+  const [signupMessage, setSignupMessage] = useState('');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginMessage, setLoginMessage] = useState('');
+
 
   // Function to handle smooth scrolling for navigation
   const scrollToSection = (id) => {
@@ -14,7 +43,67 @@ const App = () => {
     }
   };
 
-  // Removed the useEffect for scrollbar styles as they are now in index.css
+  // Handle user signup
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setSignupMessage(''); // Clear previous messages
+
+    try {
+      // 1. Create user in Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
+      const user = userCredential.user;
+
+      // 2. Store user profile data in Firestore
+      // Use setDoc with the user's UID as the document ID for easy lookup
+      await setDoc(doc(db, "users", user.uid), {
+        email: user.email,
+        name: signupName,
+        role: signupRole,
+        createdAt: new Date(), // Store current timestamp
+      });
+
+      setSignupMessage('Registration successful! You can now log in.');
+      // Optionally, log the user in or redirect
+      setIsLoggedIn(true);
+      setUserRole(signupRole);
+      // Clear form fields
+      setSignupEmail('');
+      setSignupPassword('');
+      setSignupName('');
+
+    } catch (error) {
+      console.error("Error during signup:", error.message);
+      setSignupMessage(`Signup failed: ${error.message}`);
+    }
+  };
+
+  // Handle user login (placeholder for now)
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoginMessage(''); // Clear previous messages
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+      const user = userCredential.user;
+      // In a real app, you'd fetch the user's role from Firestore here
+      // For now, let's assume a default role or fetch from a simple lookup
+      // Example: const userDoc = await getDoc(doc(db, "users", user.uid));
+      // const role = userDoc.exists() ? userDoc.data().role : 'client';
+      const role = 'client'; // Placeholder: replace with actual role fetching from Firestore
+
+      setIsLoggedIn(true);
+      setUserRole(role);
+      setLoginMessage('Login successful!');
+      // Clear form fields
+      setLoginEmail('');
+      setLoginPassword('');
+
+    } catch (error) {
+      console.error("Error during login:", error.message);
+      setLoginMessage(`Login failed: ${error.message}`);
+    }
+  };
+
 
   return (
     <div className="bg-gray-50 text-gray-800">
@@ -26,7 +115,7 @@ const App = () => {
             <a href="#contact" onClick={() => scrollToSection('contact')} className="text-gray-600 hover:text-blue-700 transition duration-300">Contact</a>
             <a href="#aboutUs" onClick={() => scrollToSection('aboutUs')} className="text-gray-600 hover:text-blue-700 transition duration-300">About Us</a>
             <a href="#ourExpertise" onClick={() => scrollToSection('ourExpertise')} className="text-gray-600 hover:text-blue-700 transition duration-300">Our Expertise</a>
-            {/* Future Login/Dashboard Links */}
+            {/* Conditional rendering for Login/Signup/Dashboard based on login status */}
             {isLoggedIn ? (
               <>
                 {userRole === 'admin' && (
@@ -241,8 +330,36 @@ const App = () => {
       <section id="login" className="py-20 px-4 bg-gray-50 rounded-lg shadow-inner mx-4 my-8 md:my-12">
         <div className="container mx-auto text-center max-w-md">
           <h2 className="text-4xl font-bold text-gray-800 mb-12">Login</h2>
-          {/* Your login form will go here */}
-          <p>Login form will be implemented here using Firebase Authentication.</p>
+          {loginMessage && <p className="text-center mb-4 p-2 rounded-md bg-blue-100 text-blue-700">{loginMessage}</p>}
+          <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div>
+                <label htmlFor="loginEmail" className="block text-left text-gray-700 text-sm font-semibold mb-2">Email</label>
+                <input
+                  type="email"
+                  id="loginEmail"
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label htmlFor="loginPassword" className="block text-left text-gray-700 text-sm font-semibold mb-2">Password</label>
+                <input
+                  type="password"
+                  id="loginPassword"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <button type="submit" className="w-full bg-blue-700 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-800 transition duration-300 transform hover:scale-105 shadow-lg">
+                Login
+              </button>
+            </form>
+          </div>
         </div>
       </section>
 
@@ -250,8 +367,60 @@ const App = () => {
       <section id="signup" className="py-20 px-4 bg-gray-50 rounded-lg shadow-inner mx-4 my-8 md:my-12">
         <div className="container mx-auto text-center max-w-md">
           <h2 className="text-4xl font-bold text-gray-800 mb-12">Signup</h2>
-          {/* Your signup form will go here */}
-          <p>Signup form will be implemented here using Firebase Authentication.</p>
+          {signupMessage && <p className="text-center mb-4 p-2 rounded-md bg-blue-100 text-blue-700">{signupMessage}</p>}
+          <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
+            <form onSubmit={handleSignup} className="space-y-6">
+              <div>
+                <label htmlFor="signupName" className="block text-left text-gray-700 text-sm font-semibold mb-2">Full Name</label>
+                <input
+                  type="text"
+                  id="signupName"
+                  value={signupName}
+                  onChange={(e) => setSignupName(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label htmlFor="signupEmail" className="block text-left text-gray-700 text-sm font-semibold mb-2">Email</label>
+                <input
+                  type="email"
+                  id="signupEmail"
+                  value={signupEmail}
+                  onChange={(e) => setSignupEmail(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label htmlFor="signupPassword" className="block text-left text-gray-700 text-sm font-semibold mb-2">Password</label>
+                <input
+                  type="password"
+                  id="signupPassword"
+                  value={signupPassword}
+                  onChange={(e) => setSignupPassword(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label htmlFor="signupRole" className="block text-left text-gray-700 text-sm font-semibold mb-2">Role</label>
+                <select
+                  id="signupRole"
+                  value={signupRole}
+                  onChange={(e) => setSignupRole(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="client">Client</option>
+                  {/* Be cautious about exposing 'admin' role in public signup forms in a real application */}
+                  {/* <option value="admin">Admin</option> */}
+                </select>
+              </div>
+              <button type="submit" className="w-full bg-blue-700 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-800 transition duration-300 transform hover:scale-105 shadow-lg">
+                Signup
+              </button>
+            </form>
+          </div>
         </div>
       </section>
 
